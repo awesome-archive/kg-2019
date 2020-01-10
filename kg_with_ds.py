@@ -1,6 +1,7 @@
 #! -*- coding:utf-8 -*-
 
 
+from __future__ import print_function
 import json
 import numpy as np
 from random import choice
@@ -328,6 +329,7 @@ class Attention(Layer):
         self.out_dim = nb_head * size_per_head
         super(Attention, self).__init__(**kwargs)
     def build(self, input_shape):
+        super(Attention, self).build(input_shape)
         q_in_dim = input_shape[0][-1]
         k_in_dim = input_shape[1][-1]
         v_in_dim = input_shape[2][-1]
@@ -357,7 +359,7 @@ class Attention(Layer):
             v_mask = inputs[3]
             if len(inputs) > 4:
                 q_mask = inputs[4]
-        # 线性变化
+        # 线性变换
         qw = K.dot(q, self.q_kernel)
         kw = K.dot(k, self.k_kernel)
         vw = K.dot(v, self.v_kernel)
@@ -634,7 +636,7 @@ class Evaluate(Callback):
         if f1 > self.best:
             self.best = f1
             train_model.save_weights('best_model.weights')
-        print 'f1: %.4f, precision: %.4f, recall: %.4f, best f1: %.4f\n' % (f1, precision, recall, self.best)
+        print('f1: %.4f, precision: %.4f, recall: %.4f, best f1: %.4f\n' % (f1, precision, recall, self.best))
         EMAer.reset_old_weights()
         if epoch + 1 == 50 or (
             self.stage == 0 and epoch > 10 and
